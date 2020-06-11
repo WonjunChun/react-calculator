@@ -58,7 +58,10 @@ class Calculator extends React.Component {
       "√": () => {},
       // TODO: 사칙연산 구현
       "÷": () => {
-        
+        //divide
+        if(lastChar !== "" && !operatorKeys.includes(lastChar)) {
+          this.setState({ displayValue: displayValue + "÷"});
+        }
       },
       "×": () => {},
       "-": () => {
@@ -75,8 +78,15 @@ class Calculator extends React.Component {
       },
       "=": () => {
         if (lastChar !== "" && operatorKeys.includes(lastChar)) {
+          //입력값이 연산자로 끝나면, 맨 마지막 문자(연산자) 지워줌
           displayValue = displayValue.substr(0, displayValue.length - 1);
         } else if (lastChar !== "") {
+          //입력값이 연산자로 끝나지 않으면,
+          if (displayValue.includes("÷")) {
+            //"÷" 문자를 포함하면, javascript에서 계산할 수 있도록 "/"로 치환
+            displayValue = displayValue.replace("÷", "/");
+          }
+          //javascript로 연산 실행
           displayValue = evalFunc(displayValue);
         }
         this.setState({ displayValue });
