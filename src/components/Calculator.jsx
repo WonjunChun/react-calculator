@@ -63,7 +63,12 @@ class Calculator extends React.Component {
           this.setState({ displayValue: displayValue + "÷"});
         }
       },
-      "×": () => {},
+      "×": () => {
+        //multiply
+        if(lastChar !== "" && !operatorKeys.includes(lastChar)) {
+          this.setState({ displayValue: displayValue + "×"});
+        }
+      },
       "-": () => {
         //substract
         if (lastChar !== "" && !operatorKeys.includes(lastChar)) {
@@ -85,6 +90,10 @@ class Calculator extends React.Component {
           if (displayValue.includes("÷")) {
             //"÷" 문자를 포함하면, javascript에서 계산할 수 있도록 "/"로 치환
             displayValue = displayValue.replace("÷", "/");
+          }
+          if(displayValue.includes("×")) {
+            //"×" 문자 포함시, "*"로 치환
+            displayValue = displayValue.replace("×", "*");
           }
           //javascript로 연산 실행
           displayValue = evalFunc(displayValue);
