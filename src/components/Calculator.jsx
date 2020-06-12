@@ -55,7 +55,26 @@ class Calculator extends React.Component {
         this.setState({ displayValue });
       },
       // TODO: 제곱근 구현
-      "√": () => {},
+      "√": () => {
+        //sqrt 버튼 누르면 결과 바로 띄워줌("="와 유사)
+        if (lastChar !== "" && operatorKeys.includes(lastChar)) {
+          //입력값이 연산자로 끝나면, 맨 마지막 문자(연산자) 지워줌
+          displayValue = displayValue.substr(0, displayValue.length - 1);
+        } else if (lastChar !== "") {
+          //입력값이 연산자로 끝나지 않으면,
+          if (displayValue.includes("÷")) {
+            //"÷" 문자를 포함하면, javascript에서 계산할 수 있도록 "/"로 치환
+            displayValue = displayValue.replace("÷", "/");
+          }
+          if(displayValue.includes("×")) {
+            //"×" 문자 포함시, "*"로 치환
+            displayValue = displayValue.replace("×", "*");
+          }
+          //javascript로 연산 실행
+          displayValue = Math.sqrt(evalFunc(displayValue));
+        }
+        this.setState({ displayValue });
+      },
       // TODO: 사칙연산 구현
       "÷": () => {
         //divide
@@ -123,11 +142,15 @@ class Calculator extends React.Component {
         <Panel>
           <Display displayValue={this.state.displayValue} />
           <ButtonGroup onClickButton={this.onClickButton}>
-            <Button size={2} color="gray">
+            <Button size={1} color="gray">
               AC
             </Button>
             <Button size={1} color="gray">
               BS
+            </Button>
+            //sqrt 버튼 추가
+            <Button size={1} color="gray">
+              √
             </Button>
             <Button size={1} color="gray">
               ÷
